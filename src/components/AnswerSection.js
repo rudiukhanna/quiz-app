@@ -1,17 +1,29 @@
-import { useContext } from "react";
-import { QuizContext }   from '../App';
+import { connect } from 'react-redux';
+import { handleAnswerOptionClick } from '../actions/quizActions';
 
-export function AnswerSection() {
-    const { questions, currentQuestion, handleAnswerOptionClick } = useContext(QuizContext);
+const AnswerSection = ({ questions, currentQuestion, handleAnswerOptionClick }) => {
+  const question = questions[currentQuestion];
 
-
-    return (
-		<div className="answer-section">
-            {questions[currentQuestion].answerOptions.map((answerOption) => (
-				<button onClick={() => handleAnswerOptionClick(answerOption.isCorrect)}>
-					{answerOption.answerText}
-				</button>
-			))}
+  return (
+    <div className="answer-section">
+      {question.answerOptions.map((answerOption, index) => (
+        <button key={index} onClick={() => handleAnswerOptionClick(answerOption.isCorrect)}>
+          {answerOption.answerText}
+        </button>
+      ))}
     </div>
-    );
-}
+  );
+};
+
+const mapStateToProps = (state) => {
+  return {
+    questions: state.questions,
+    currentQuestion: state.currentQuestion
+  };
+};
+
+const mapDispatchToProps = {
+  handleAnswerOptionClick
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(AnswerSection);

@@ -1,15 +1,23 @@
-import { useContext } from "react";
-import { QuizContext } from '../App';
+import { connect } from 'react-redux';
 
-export function QuestionSection() {
-    const { questions, currentQuestion } = useContext(QuizContext);
+const QuestionSection = ({ questions, currentQuestion }) => {
+  const question = questions[currentQuestion];
 
-    return (
-     <div className="question-section">
-          <div className="question-count">
-            <span>Question {currentQuestion + 1}</span>/{questions.length}
-          </div>
-          <div className="question-text">{questions[currentQuestion].questionText}</div>
+  return (
+    <div className="question-section">
+      <div className="question-count">
+        <span>Question {currentQuestion + 1}</span>/{questions.length}
       </div>
-      );
-}
+      <div className="question-text">{question.questionText}</div>
+    </div>
+  );
+};
+
+const mapStateToProps = (state) => {
+  return {
+    questions: state.questions,
+    currentQuestion: state.currentQuestion
+  };
+};
+
+export default connect(mapStateToProps)(QuestionSection);
